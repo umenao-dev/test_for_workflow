@@ -1,0 +1,55 @@
+name: Task
+description: General task / improvement
+labels: []
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: Fill required fields. Add "緊急" to title if needed.
+
+  - type: input
+    id: due_date
+    attributes:
+      label: Due Date
+      description: Format YYYY-MM-DD
+      placeholder: YYYY-MM-DD
+    validations:
+      required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What needs to be done
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Background or purpose
+    validations:
+      required: true
+
+  - type: textarea
+    id: done_criteria
+    attributes:
+      label: Definition of Done
+      description: Completion criteria
+    validations:
+      required: true
+
+  - type: input
+    id: scope
+    attributes:
+      label: Scope
+      description: Affected area (API/UI/DB etc.)
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: Related issues or blockers
+

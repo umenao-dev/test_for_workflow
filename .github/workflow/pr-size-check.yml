@@ -1,0 +1,35 @@
+name: PR Size Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check-size:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 差分計算に必要
+
+      - name: Fetch base branch
+        run: |
+          git fetch origin ${{ github.base_ref }}
+
+      - name: Calculate diff size
+        id: diff
+        run: |
+          lines=$(git diff --numstat origin/${{ github.base_ref }}...HEAD \
+            | awk '{add+=$1; del+=$2} END {print add+del}')
+          echo "lines=$lines" >> $GITHUB_OUTPUT
+          echo "Changed lines: $lines"
+
+      - name: Check threshold
+        run: |
+          LIMIT=400
+          if [ "${{ steps.diff.outputs.lines }}" -gt "$LIMIT" ]; then
+            echo "PR is too large (> $LIMIT lines)"
+            exit 1
+          fi

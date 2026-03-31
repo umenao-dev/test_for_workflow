@@ -1,0 +1,61 @@
+name: Bug Report
+description: Report a bug with structured information
+title: "[BUG] "
+labels: ["bug"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Bug Report
+        Fill required fields precisely.
+
+  - type: input
+    id: due_date
+    attributes:
+      label: Due Date
+      description: Format YYYY-MM-DD
+      placeholder: YYYY-MM-DD
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue_description
+    attributes:
+      label: Issue Description
+      description: Describe what is happening
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Step-by-step reproduction
+      placeholder: |
+        1. Open ...
+        2. Click ...
+        3. Error occurs
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: Describe expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS / Browser / Version / Conditions
+      placeholder: |
+        OS: 
+        Browser: 
+        Version: 
+    validations:
+      required: true
