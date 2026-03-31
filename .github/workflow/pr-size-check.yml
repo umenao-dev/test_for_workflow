@@ -28,7 +28,7 @@ jobs:
 
       - name: Check threshold
         run: |
-          LIMIT=400
+          LIMIT=100
           if [ "${{ steps.diff.outputs.lines }}" -gt "$LIMIT" ]; then
             echo "PR is too large (> $LIMIT lines)"
             exit 1
