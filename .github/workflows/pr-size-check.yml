@@ -12,7 +12,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # 差分計算に必要
+          fetch-depth: 0
 
       - name: Fetch base branch
         run: |
@@ -21,15 +21,31 @@ jobs:
       - name: Calculate diff size
         id: diff
         run: |
-          lines=$(git diff --numstat origin/${{ github.base_ref }}...HEAD \
-            | awk '{add+=$1; del+=$2} END {print add+del}')
-          echo "lines=$lines" >> $GITHUB_OUTPUT
-          echo "Changed lines: $lines"
+          diff_output=$(git diff --numstat origin/${{ github.base_ref }}...HEAD)
 
-      - name: Check threshold
+          # 行数計算
+          lines=$(echo "$diff_output" | awk '{add+=$1; del+=$2} END {print add+del}')
+
+          # ファイル数計算（行数＝ファイル数）
+          files=$(echo "$diff_output" | wc -l)
+
+          echo "lines=$lines" >> $GITHUB_OUTPUT
+          echo "files=$files" >> $GITHUB_OUTPUT
+
+          echo "Changed lines: $lines"
+          echo "Changed files: $files"
+
+      - name: Check thresholds
         run: |
-          LIMIT=100
-          if [ "${{ steps.diff.outputs.lines }}" -gt "$LIMIT" ]; then
-            echo "PR is too large (> $LIMIT lines)"
+          LINE_LIMIT=100
+          FILE_LIMIT=10
+
+          if [ "${{ steps.diff.outputs.lines }}" -gt "$LINE_LIMIT" ]; then
+            echo "PR is too large (> $LINE_LIMIT lines)"
+            exit 1
+          fi
+
+          if [ "${{ steps.diff.outputs.files }}" -gt "$FILE_LIMIT" ]; then
+            echo "Too many files changed (> $FILE_LIMIT files)"
             exit 1
           fi
