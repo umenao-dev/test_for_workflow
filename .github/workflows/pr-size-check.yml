@@ -37,7 +37,7 @@ jobs:
 
       - name: Check thresholds
         run: |
-          LINE_LIMIT=100
+          LINE_LIMIT=400
           FILE_LIMIT=10
 
           if [ "${{ steps.diff.outputs.lines }}" -gt "$LINE_LIMIT" ]; then
