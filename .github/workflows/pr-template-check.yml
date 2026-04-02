@@ -1,0 +1,28 @@
+name: PR Template Check
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  check-template:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check PR body
+        env:
+          BODY: ${{ github.event.pull_request.body }}
+        run: |
+          echo "PR Body:"
+          echo "$BODY"
+
+          # 未記入パターン検出（コメントや空欄）
+          if echo "$BODY" | grep -q "<!--"; then
+            echo "Template comments are still present. Please fill the template."
+            exit 1
+          fi
+
+          if [ -z "$BODY" ]; then
+            echo "PR description is empty."
+            exit 1
+          fi
